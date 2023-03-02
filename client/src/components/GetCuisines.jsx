@@ -28,15 +28,17 @@ const GetCuisines = () => {
 
     // functions after a choice is made
     const OnFirstChoiceClick = () => {
+        // e.preventDefault()
         deleteSecondChoice()
         pullSecondChoice()
     }
     const OnSecondChoiceClick = () => {
+        // e.preventDefault()
         deleteFirstChoice()
         pullFirstChoice()
     }
 
-    // indidivuals function for pulling and deleting both choices
+    // individual functions for pulling and deleting both choices
     const pullFirstChoice = () => {
         setFirstChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})])
         console.log(firstChoice.name)
@@ -68,7 +70,7 @@ const GetCuisines = () => {
                 { firstChoice !== "" &&
                 <div className="choicesContainer">
                     
-                    <button className="choiceBox" onClick={() => {OnFirstChoiceClick()}}>
+                    <button className="choiceBox" onClick={() =>{OnFirstChoiceClick()}}>
                         <div className="choiceText">{firstChoice.name}</div>
                         <img className="cuisineImage" src={firstChoice.image} alt="Cuisine Image" />
                     </button>
