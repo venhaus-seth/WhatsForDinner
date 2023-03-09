@@ -7,6 +7,7 @@ const GetCuisines = () => {
     const [allCuisines, setAllCuisines] = useState([]);
     const [firstChoice, setFirstChoice] = useState("")
     const [secondChoice, setSecondChoice] = useState("")
+    const [isStarted, setIsStarted] = useState(false)
     let chance = require('chance').Chance()
 
     //pulls all cuisines in array: AllCuisines
@@ -18,12 +19,20 @@ const GetCuisines = () => {
             .catch(err => console.log(err))
         }, [])
 
+    //use this useEffect for logic when updating state on first and second choices???
+    // useEffect(() => {
+
+    // }, [])
+
     //function for clicking the start button
     const initializeGame = () => {
         setFirstChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})])
+        console.log(firstChoice)
         setSecondChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})]);
-        deleteFirstChoice()
+        console.log(secondChoice)
+        deleteFirstChoice() 
         deleteSecondChoice()
+        setIsStarted(true)
     }
 
     // functions after a choice is made
@@ -42,7 +51,7 @@ const GetCuisines = () => {
     const pullFirstChoice = () => {
         setFirstChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})])
         console.log(firstChoice.name)
-        while (firstChoice.name === secondChoice.name && firstChoice.name !== "") {
+        while (firstChoice.name === secondChoice.name) {
             console.log("first and second are the same1")
             setFirstChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})])
         }
@@ -50,7 +59,7 @@ const GetCuisines = () => {
     const pullSecondChoice = () => {
         setSecondChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})]);
         console.log(secondChoice.name)
-        while (firstChoice.name === secondChoice.name && firstChoice.name !== "") {
+        while (firstChoice.name === secondChoice.name) {
             console.log("first and second are the same2")
             setSecondChoice(allCuisines[chance.integer({min: 0, max: (allCuisines.length - 1)})])
         }
@@ -64,34 +73,41 @@ const GetCuisines = () => {
 
     return(
         <div>
-            <h2>Would you rather have...</h2>
-            <button onClick={() => {initializeGame()}}>Start</button>
-        
-                { firstChoice !== "" &&
-                <div className="choicesContainer">
-                    
-                    <button className="choiceBox" onClick={() =>{OnFirstChoiceClick()}}>
-                        <div className="choiceText">{firstChoice.name}</div>
-                        <img className="cuisineImage" src={firstChoice.image} alt="Cuisine Image" />
-                    </button>
+            
+            {(() => {
 
-                    <button className="choiceBox" onClick={() => {OnSecondChoiceClick()}}>
-                        <div className="choiceText">{secondChoice.name}</div>
-                        <img className="cuisineImage" src={secondChoice.image} alt="Cuisine Image" />
-                    </button>
-                    
-                
-                </div>
+                if (!isStarted) { 
+                return <button onClick={initializeGame}>Start</button>
+                } 
+
+                else {
+                return <div>
+                        <h2>Would you rather have...</h2>
+                        <div className="choicesContainer">
+                        
+                        <button className="choiceBox" onClick={OnFirstChoiceClick}>
+                            <div className="choiceText">{firstChoice.name}</div>
+                            <img className="cuisineImage" src={firstChoice.image} alt="Cuisine Image" />
+                        </button>
+
+                        <button className="choiceBox" onClick={OnSecondChoiceClick}>
+                            <div className="choiceText">{secondChoice.name}</div>
+                            <img className="cuisineImage" src={secondChoice.image} alt="Cuisine Image" />
+                        </button>
+                        
+                    </div>
+                </div> 
                 }
 
-                { allCuisines.map((cuisine, i) => 
+            })()}
+
+                {allCuisines.map((cuisine, i) => 
                 <div key={i}>
                     <p> 
                         {cuisine.name}
                     </p>
                 </div>
-                
-                )}        
+            )}  
             
         </div>
     )
